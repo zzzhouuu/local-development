@@ -1,0 +1,47 @@
+version: "2"
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=ok123
+    volumes:
+      - "mysql_data:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: redis:6.0
+    container_name: redis
+    restart: unless-stopped
+    volumes:
+      - "redis_data:/data"
+    ports:
+      - "6379:6379"
+
+  redis-ui:
+    image: redislabs/redisinsight:1.9.0
+    container_name: redis-ui
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+
+  verdaccio:
+    image: verdaccio/verdaccio
+    container_name: verdaccio
+    restart: unless-stopped
+    environment:
+      - VERDACCIO_PORT=4873
+    volumes:
+      - "verdaccio_data:/verdaccio/storage"
+    ports:
+      - "4873:4873"
+
+volumes:
+  mysql_data:
+  redis_data:
+  verdaccio_data:
